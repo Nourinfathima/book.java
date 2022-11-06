@@ -172,10 +172,65 @@ public class book {
 
                 case 6:
                     System.out.println("Search a book starting with a specific letter");
+                    System.out.println("Enter the first letter to search: ");
+                    String bookLetter = input.next();
+
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb", "root", "");
+                        String sql = "SELECT `bookname`, `author`, `language`, `category`, `charge/day` FROM `books` WHERE `bookname` LIKE '"+bookLetter+"%'";
+
+
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchBookName = rs.getString("bookname");
+                            String fetchBookAuthor = rs.getString("author");
+                            String fetchBookLanguage = rs.getString("language");
+                            String fetchBookCategory = rs.getString("category");
+                            String fetchBookDayCharge = rs.getString("charge/day");
+
+                            System.out.println("Book Name: "+fetchBookName);
+                            System.out.println("Author : "+fetchBookAuthor);
+                            System.out.println("Book Language : "+fetchBookLanguage);
+                            System.out.println("Category: "+fetchBookCategory);
+                            System.out.println("Books charge/day : "+fetchBookDayCharge+"\n");
+
+                        }
+
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
                     break;
 
                 case 7:
                     System.out.println("Display total books in each category");
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                        String sql ="SELECT COUNT(*) AS total, `category` FROM `books` GROUP BY `category`";
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        System.out.println("-------------------------------------");
+                        while(rs.next()){
+                            String fetchTotal = rs.getString("total");
+                            String fetchCategory = rs.getString("category");
+
+
+                            System.out.print("Total Books : "+fetchTotal+" |");
+                            System.out.print(" Category : "+fetchCategory+"\n");
+
+
+
+                        }
+                        System.out.println("-------------------------------------");
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
                     break;
                 case 8:
                     System.out.println("View books in a specific category");
