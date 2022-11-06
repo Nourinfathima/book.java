@@ -1,6 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
-public class bookapp {
+public class book {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int bookDayCharge;
@@ -62,8 +62,33 @@ public class bookapp {
                 case 2:
                     System.out.println("View all Book");
 
-                    break;
+                    try{
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/librarydb","root","");
+                        String sql ="SELECT `bookname`, `author`, `language`, `category`, `charge/day` FROM `books` ";
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while(rs.next()){
+                            String fetchBookName = rs.getString("bookname");
+                            String fetchBookAuthor = rs.getString("author");
+                            String fetchBookLanguage = rs.getString("language");
+                            String fetchBookCategory = rs.getString("category");
+                            String fetchBookDayCharge = rs.getString("charge/day");
 
+                            System.out.println("Book Name: "+fetchBookName);
+                            System.out.println("Author : "+fetchBookAuthor);
+                            System.out.println("Book Language : "+fetchBookLanguage);
+                            System.out.println("Category: "+fetchBookCategory);
+                            System.out.println("Books charge/day : "+fetchBookDayCharge+"\n");
+
+
+                        }
+                    }
+                    catch (Exception e){
+                        System.out.println(e);
+                    }
+
+                    break;
 
                 case 3:
                     System.out.println("Search a book");
